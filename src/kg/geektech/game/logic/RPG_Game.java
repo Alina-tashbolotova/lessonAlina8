@@ -22,6 +22,7 @@ public class RPG_Game {
         Avrora avrora = new Avrora(280, 20);
         Hero[] heroes = {warrior, magic, doc, berserk, assistant, thor, golem, witcher, avrora};
         printStatistics(boss, heroes);
+        // Метод начало игры
 
         while (!isGameFinished(boss, heroes)) {
             round(boss, heroes);
