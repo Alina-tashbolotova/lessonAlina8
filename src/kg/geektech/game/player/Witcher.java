@@ -21,6 +21,7 @@ public class Witcher extends Hero {
                 }
 
             }
+            System.out.println();
         }
 
 
