@@ -9,16 +9,12 @@ public class Thor extends Hero {
 
     @Override
     public void applySuperAbility(Boss boss, Hero[] heroes) {
-        boolean random = RPG_Game.random.nextBoolean();
-        for (int i = 0; i < heroes.length; i++) {
-            if (random) {
-                System.out.println(" Тор оглушил");
-
-                heroes[i].setHealth(heroes[i].getHealth() + boss.getDamage());
-                break;
-            }
-
-
+        int chance =RPG_Game.random.nextInt(3) + 1;
+        if (chance == 3){ //50 * 50
+         boss.setStunned(true);
+            System.out.println("Boss is stunned by Thor");
+        }else {
+            boss.setStunned(false);
         }
 
     }

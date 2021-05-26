@@ -2,7 +2,7 @@ package kg.geektech.game.player;
 
 public class Golem extends Hero {
     public Golem(int health, int damage) {
-        super(health, damage, SuperAbility.PROTECTION);
+        super(health, damage, SuperAbility.TAKE_OVER);
     }
 
     @Override

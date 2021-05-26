@@ -1,5 +1,7 @@
 package kg.geektech.game.player;
 
+import kg.geektech.game.logic.RPG_Game;
+
 public class
 Berserk extends Hero {
     public Berserk(int health, int damage) {
@@ -8,14 +10,11 @@ Berserk extends Hero {
 
     @Override
     public void applySuperAbility(Boss boss, Hero[] heroes) {
-        for (int i = 0; i < heroes.length; i++) {
-            if (heroes[i].getHealth() > 0 && heroes[i] == this) {
-                heroes[i].setDamage(25);
-                boss.setHealth(boss.getHealth() - (heroes[i].getDamage() + boss.getDamage() / 2));
-                System.out.println("Berserk наносит урон Боссу");
+        int saved_damage = RPG_Game.random.nextInt(15) + 1;
+        this.setHealth(this.getHealth() - (boss.getDamage() - saved_damage));
+        boss.setHealth(boss.getHealth() - (this.getDamage() + saved_damage));
+        System.out.println("Berserk saved and reverted" + saved_damage);
 
-            }
-        }
     }
 }
 

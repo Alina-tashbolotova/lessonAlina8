@@ -7,6 +7,7 @@ import java.util.Random;
 public class RPG_Game {
 
     public static Random random = new Random();
+    private static int roundNum = 0;
 
     public static void start() {
         Boss boss = new Boss(1000, 50);
@@ -16,14 +17,10 @@ public class RPG_Game {
         Berserk berserk = new Berserk(250, 25);
         Medic assistant = new Medic(260, 15, 5);
         Thor thor = new Thor(270, 30);
-        Golem golem = new Golem(300,10);
-        Witcher witcher = new Witcher(270,0);
-        Avrora avrora = new Avrora(280,20);
-        Hacker hacker = new Hacker(200,20);
-        TrickyBastard trickyBastard = new TrickyBastard(250,0);
-        Antman antman = new Antman(250,20);
-        Hero[] heroes = {warrior, magic, doc, berserk, assistant,thor,golem,witcher,avrora,hacker,
-                trickyBastard,antman};
+        Golem golem = new Golem(300, 10);
+        Witcher witcher = new Witcher(270, 0);
+        Avrora avrora = new Avrora(280, 20);
+        Hero[] heroes = {warrior, magic, doc, berserk, assistant, thor, golem, witcher, avrora};
         printStatistics(boss, heroes);
 
         while (!isGameFinished(boss, heroes)) {
@@ -33,19 +30,36 @@ public class RPG_Game {
     }
 
     private static void round(Boss boss, Hero[] heroes) {
-        if (boss.getHealth() > 0) {
+        if (boss.getHealth() > 0 && !boss.isStunned()) {
             bossHits(boss, heroes);
         }
         heroesHits(boss, heroes);
+        System.out.println("ROUND--" + (++roundNum));
+        // pre increment
         applySuperPower(boss, heroes);
         printStatistics(boss, heroes);
+        for (int i = 0; i < heroes.length; i++) {
+            if (heroes[i].getSuperAbility() == SuperAbility.DISAPEAR) {
+                if (((Avrora) heroes[i]).getRoundCounter() == 2) {
+                    ((Avrora) heroes[i]).setDissapeared(false);
+                    boss.setHealth(boss.getHealth() - boss.getDamage()
+                            * (((Avrora) heroes[i]).getRoundCounter()));
+                    System.out.println("Avrora returnet to game");
+                }
+                if (((Avrora) heroes[i]).isDissapeared()) {
+                    ((Avrora) heroes[i]).setRoundCounter(((Avrora) heroes[i]).getRoundCounter() + 1);
+                }
+            }
+        }
 
     }
 
 
     private static void bossHits(Boss boss, Hero[] heroes) {
         for (int i = 0; i < heroes.length; i++) {
-            if (heroes[i].getHealth() > 0) {
+            if (heroes[i].getHealth() > 0 && heroes[i].getSuperAbility() !=
+                    SuperAbility.SAVE_DAMAGE_AND_REVERT && (heroes[i].getSuperAbility() !=
+                    SuperAbility.DISAPEAR)) {
                 heroes[i].setHealth(heroes[i].getHealth() - boss.getDamage());
 
             }
@@ -67,7 +81,9 @@ public class RPG_Game {
 
     private static void heroesHits(Boss boss, Hero[] heroes) {
         for (int i = 0; i < heroes.length; i++) {
-            if (heroes[i].getHealth() > 0 && boss.getHealth() > 0) {
+            if (heroes[i].getHealth() > 0 && boss.getHealth() > 0 && heroes[i].getSuperAbility() !=
+                    SuperAbility.SAVE_DAMAGE_AND_REVERT && heroes[i].getSuperAbility() !=
+                    SuperAbility.CRITICAL_DAMAGE) {
                 boss.setHealth(boss.getHealth() - heroes[i].getDamage());
             }
         }
